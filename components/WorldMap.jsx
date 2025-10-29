@@ -6,8 +6,8 @@ import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simp
 const regimeColors = {
   'Closed Autocracy': '#8B0000',      // Dark Red
   'Electoral Autocracy': '#FF6B6B',   // Light Red/Coral
-  'Electoral Democracy': '#4ECDC4',   // Teal
-  'Liberal Democracy': '#45B7D1',     // Blue
+  'Electoral Democracy': '#90EE90',   // Light Green
+  'Liberal Democracy': '#2E7D32',     // Dark Green
   'No Data': '#CCCCCC'                // Gray
 }
 
@@ -65,6 +65,8 @@ export default function WorldMap() {
   }
 
   const handleCountryClick = (geo, event) => {
+    event.stopPropagation() // Prevent map click handler from firing
+
     const isoCode = geo.properties.ISO_A3 === '-99' ? geo.properties.ISO_A3_EH : geo.properties.ISO_A3
     const countryName = geo.properties.NAME || geo.properties.ADMIN
     const regime = regimeData[isoCode] || 'No Data'
@@ -79,11 +81,9 @@ export default function WorldMap() {
     }
   }
 
-  const handleMapClick = (e) => {
-    // If clicking on the background (not a country), clear the label
-    if (e.target.tagName === 'svg' || e.target.tagName === 'g') {
-      setClickedCountry(null)
-    }
+  const handleMapClick = () => {
+    // Clear the label when clicking anywhere on the map (not a country)
+    setClickedCountry(null)
   }
 
   return (

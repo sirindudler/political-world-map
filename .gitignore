@@ -36,3 +36,8 @@ next-env.d.ts
 
 # raw data files (keep only processed versions)
 public/vdem-raw-data.csv
+*.xlsx
+nul
+
+# Claude Code local config
+.claude/

@@ -202,6 +202,7 @@ export default function WorldMap() {
         setWikiData({
           extract: data.extract,
           thumbnail: data.thumbnail?.source,
+          url: data.content_urls?.desktop?.page,
         })
         setWikiLoading(false)
       })
@@ -331,6 +332,17 @@ export default function WorldMap() {
               </p>
             )}
 
+            {wikiData?.url && (
+              <a
+                href={wikiData.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-2 text-xs text-blue-600 hover:underline"
+              >
+                Wikipedia →
+              </a>
+            )}
+
             <RegimeHistory isoCode={clickedCountry.isoCode} timeseries={timeseries} />
           </div>
         </div>
@@ -378,7 +390,7 @@ export default function WorldMap() {
 
       {/* Legend */}
       <div className="fixed bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg border border-gray-200 z-10">
-        <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center justify-between gap-4 mb-3">
           <h3 className="font-bold text-sm">{config.title}</h3>
           <button
             onClick={() => setShowInfo(true)}

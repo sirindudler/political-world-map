@@ -7,15 +7,15 @@ const SOURCES = {
     fullName: 'Varieties of Democracy (V-Dem)',
     url: 'https://www.v-dem.net',
     lastUpdated: '2025 (covers up to 2024)',
-    coverage: '172 countries',
-    coverageNote: 'Some countries (e.g. China) are absent due to data access limitations or ongoing conflicts disrupting expert surveys.',
+    coverage: '179 countries',
+    coverageNote: 'A small number of territories are not covered: disputed or unrecognised regions (Western Sahara, Kosovo, Northern Cyprus, Somaliland), overseas territories (Falkland Islands, Puerto Rico, New Caledonia, Greenland), and Antarctica. Countries where current-year data is not yet available use the most recent year on record.',
     methodology: `V-Dem is a research project based at the University of Gothenburg. Over 3,500 country experts worldwide score political conditions using standardized questionnaires. Their answers feed into statistical models that produce comparable scores across countries and time.
 
 The "Regimes of the World" classification (Anna Lührmann et al., 2018) combines two underlying indices:
 • The Electoral Democracy Index — measures whether elections are free, fair, and competitive
 • The Liberal Component Index — measures rule of law, civil liberties, and checks on executive power
 
-Where the primary V-Dem survey is incomplete, this map uses the Boix-Miller-Rosato (BMR) democracy indicator as a fallback — a binary democracy/autocracy measure from the same dataset, based on electoral competition and universal suffrage.`,
+Where the primary V-Dem survey is incomplete for a given year, this map uses the Boix-Miller-Rosato (BMR) democracy indicator as a fallback — a binary democracy/autocracy measure from the same dataset, based on electoral competition and universal suffrage. If neither is available for the current year, the most recent available year is shown.`,
     categories: [
       {
         name: 'Liberal Democracy',

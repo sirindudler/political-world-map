@@ -378,7 +378,15 @@ export default function WorldMap() {
 
       {/* Legend */}
       <div className="fixed bottom-4 left-4 bg-white p-4 rounded-lg shadow-lg border border-gray-200 z-10">
-        <h3 className="font-bold mb-3 text-sm">{config.title}</h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="font-bold text-sm">{config.title}</h3>
+          <button
+            onClick={() => setShowInfo(true)}
+            aria-label="About this data"
+            className="w-5 h-5 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-500 text-xs font-bold flex items-center justify-center"
+            title="About this data"
+          >?</button>
+        </div>
         {Object.entries(config.colors)
           .filter(([type]) => type !== 'No Data')
           .map(([type, color]) => (

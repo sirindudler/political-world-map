@@ -47,8 +47,8 @@ function parseCSVRow(line) {
 const VDEM_URL = process.env.VDEM_URL ||
   'https://v-dem.net/media/datasets/V-Dem-CY-FullOthers-v15_csv.zip';
 
-const CURRENT_YEAR = process.env.VDEM_YEAR || '2024';
-const TIMESERIES_START = parseInt(CURRENT_YEAR) - 9;  // 10 years including current
+// If VDEM_YEAR is set, use it; otherwise auto-detect from CSV (set after parsing header)
+const OVERRIDE_YEAR = process.env.VDEM_YEAR || null;
 const MIN_TS_POINTS = 3;
 
 const REGIME_MAP = {
@@ -107,6 +107,36 @@ async function main() {
   // Boix fallback: maps 0→Closed Autocracy, 1→Electoral Democracy
   // Used when v2x_regime is missing (V-Dem expert survey incomplete for that country-year)
   const BOIX_MAP = { '0': 'Closed Autocracy', '1': 'Electoral Democracy' };
+
+  // Auto-detect the most recent year with actual regime data, unless overridden.
+  // This ensures the script automatically picks up new data when V-Dem releases a new
+  // dataset version (e.g. v16 covering 2025) without requiring a code change.
+  let CURRENT_YEAR = OVERRIDE_YEAR;
+  if (!CURRENT_YEAR) {
+    let maxYear = 0;
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i];
+      if (!line.trim()) continue;
+      const parts = parseCSVRow(line);
+      if (parts.length <= regimeIdx) continue;
+      const year   = parts[yearIdx] || '';
+      const regime = parts[regimeIdx] || '';
+      const boix   = boixIdx !== -1 ? (parts[boixIdx] || '') : '';
+      if (!year) continue;
+      const category = REGIME_MAP[regime] || BOIX_MAP[boix];
+      if (category) {
+        const yr = parseInt(year, 10);
+        if (yr > maxYear) maxYear = yr;
+      }
+    }
+    if (!maxYear) throw new Error('Could not detect current year from CSV data');
+    CURRENT_YEAR = String(maxYear);
+    console.log(`Auto-detected current year: ${CURRENT_YEAR}`);
+  } else {
+    console.log(`Using override year: ${CURRENT_YEAR}`);
+  }
+
+  const TIMESERIES_START = parseInt(CURRENT_YEAR) - 9;  // 10 years including current
 
   const regimeData = {};       // { ISO: category } for current year
   const timeseries = {};       // { ISO: { year: category } } for 10-year window
